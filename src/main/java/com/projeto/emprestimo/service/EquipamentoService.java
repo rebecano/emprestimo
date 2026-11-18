@@ -4,10 +4,12 @@ import com.projeto.emprestimo.model.Equipamento;
 import com.projeto.emprestimo.model.TipoEquipamento;
 import com.projeto.emprestimo.repository.EquipamentoRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Service
 public class EquipamentoService {
 
     private final EquipamentoRepository repository;

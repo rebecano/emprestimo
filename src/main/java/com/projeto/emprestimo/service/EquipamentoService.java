@@ -28,4 +28,12 @@ public class EquipamentoService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
     }
 
+    public Equipamento cadastrar(Equipamento equipamento) {
+        if (repository.existsByPatrimonio(equipamento.getPatrimonio())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Patrimônio já cadastrado");
+        }
+        equipamento.setDisponivel(true);
+        return repository.save(equipamento);
+    }
+
 }

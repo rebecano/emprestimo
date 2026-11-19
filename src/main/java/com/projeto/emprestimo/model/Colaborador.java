@@ -3,6 +3,7 @@ package com.projeto.emprestimo.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+@Entity
 public class Colaborador {
 
     @Id

@@ -25,6 +25,6 @@ public class EquipamentoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Equipamento cadastrar(@RequestBody Equipamento equipamento) {return cadastrar(equipamento);}
+    public Equipamento cadastrar(@RequestBody Equipamento equipamento) {return service.cadastrar(equipamento);}
 
 }

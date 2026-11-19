@@ -42,4 +42,11 @@ public class EmprestimoService {
         return repositoryEmprestimo.save(emprestimo);
     }
 
+    public List<Emprestimo> listarDoColaborador(Long colaboradorId) {
+        if (!repositoryColaborador.existsById(colaboradorId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de colaborador não encontrado");
+        }
+        return repositoryEmprestimo.findByColaboradorId(colaboradorId);
+    }
+
 }

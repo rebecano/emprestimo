@@ -18,9 +18,14 @@ public class EquipamentoService {
         this.repository = repository;
     }
 
-    public List<Equipamento> listar(TipoEquipamento tipo) {
-        if (tipo == null) {return repository.findAll();}
-        return repository.findByTipo(tipo);
+    public List<Equipamento> listar(TipoEquipamento tipo, Boolean disponivel) {
+        if (tipo == null && disponivel == null) {return repository.findAll();}
+
+        if (tipo == null) {return repository.findByDisponivel(disponivel);}
+
+        if (disponivel == null) {return repository.findByTipo(tipo);}
+
+        return repository.findByTipoAndDisponivel(tipo, disponivel);
     }
 
     public Equipamento buscar(Long id) {

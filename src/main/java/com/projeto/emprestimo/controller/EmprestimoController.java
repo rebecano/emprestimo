@@ -26,4 +26,5 @@ public class EmprestimoController {
     public Emprestimo emprestar(@RequestParam Long equipamentoId, @RequestParam Long colaboradorId) {
         return service.emprestar(equipamentoId, colaboradorId);
     }
+
 }

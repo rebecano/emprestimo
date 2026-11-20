@@ -41,4 +41,17 @@ public class EquipamentoService {
         return repository.save(equipamento);
     }
 
+    public Equipamento atualizar(Long id, Equipamento dados) {
+        Equipamento equipamento = buscar(id);
+        equipamento.setNome(dados.getNome());
+        equipamento.setTipo(dados.getTipo());
+
+        return repository.save(equipamento);
+    }
+
+    public void remover(Long id) {
+        buscar(id);
+        repository.deleteById(id);
+    }
+
 }

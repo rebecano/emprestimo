@@ -28,6 +28,13 @@ public class Equipamento {
 
     public Equipamento() { }
 
+    public void emprestar() {
+        if (!isDisponivel()) {throw new IllegalStateException("Erro: equipamento indisponível");}
+        setDisponivel(false);
+    }
+
+    public void devolver() {setDisponivel(true);}
+
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
@@ -42,4 +49,5 @@ public class Equipamento {
 
     public boolean isDisponivel() {return disponivel;}
     public void setDisponivel(boolean disponivel) {this.disponivel = disponivel;}
+
 }

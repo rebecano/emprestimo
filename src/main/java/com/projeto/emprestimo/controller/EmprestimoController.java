@@ -16,7 +16,9 @@ public class EmprestimoController {
     public EmprestimoController(EmprestimoService service) {this.service = service;}
 
     @GetMapping
-    public List<Emprestimo> listar() {return service.listar();}
+    public List<Emprestimo> listar(@RequestParam(required = false) Boolean atrasados) {
+        return service.listar(atrasados);
+    }
 
     @GetMapping("/{id}")
     public Emprestimo buscar(@PathVariable Long id) {return service.buscar(id);}
@@ -26,5 +28,8 @@ public class EmprestimoController {
     public Emprestimo emprestar(@RequestParam Long equipamentoId, @RequestParam Long colaboradorId) {
         return service.emprestar(equipamentoId, colaboradorId);
     }
+
+    @PutMapping("/{id}/devolucao")
+    public Emprestimo devolver(@PathVariable Long id) {return service.devolver(id);}
 
 }

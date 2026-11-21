@@ -32,9 +32,17 @@ public class Emprestimo {
         dataPrevistaDevolucao = dataEmprestimo.plusDays(DIAS_DE_GARANTIA);
     }
 
-    public void devolver(LocalDate data) { }
+    public void devolver(LocalDate data) {
+        if (dataDevolucao != null) {throw new IllegalStateException("Erro: empréstimo já devolvido");}
+        dataDevolucao = data;
+    }
 
-    public boolean estaAtrasadoEm(LocalDate data) {return true;}
+    public boolean estaAtrasadoEm(LocalDate data) {
+        if (dataDevolucao != null) {
+            return false;
+        }
+        return data.isAfter(dataPrevistaDevolucao);
+    }
 
     public boolean isAtrasado() {return estaAtrasadoEm(LocalDate.now());}
 

@@ -1,5 +1,6 @@
 package com.projeto.emprestimo.service;
 
+import com.projeto.emprestimo.model.Colaborador;
 import com.projeto.emprestimo.model.Emprestimo;
 import com.projeto.emprestimo.model.Equipamento;
 import com.projeto.emprestimo.repository.ColaboradorRepository;
@@ -43,13 +44,12 @@ public class EmprestimoService {
         Equipamento equipamento = repositoryEquipamento.findById(equipamentoId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de equipamento não encontrado"));
 
-        if (!repositoryColaborador.existsById(colaboradorId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de colaborador não encontrado");
-        }
+        Colaborador colaborador = repositoryColaborador.findById(colaboradorId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de colaborador não encontrado"));
 
         if (repositoryEmprestimo.existsByColaboradorIdAndDataDevolucaoIsNullAndDataPrevistaDevolucaoBefore(
                 colaboradorId, LocalDate.now())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: o colaborador tem empréstimos em atraso");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: " + colaborador.getNome() + "está com empréstimos em atraso");
         }
 
         equipamento.emprestar();

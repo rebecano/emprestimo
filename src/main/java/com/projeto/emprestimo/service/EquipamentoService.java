@@ -45,7 +45,6 @@ public class EquipamentoService {
         Equipamento equipamento = buscar(id);
         equipamento.setNome(dados.getNome());
         equipamento.setTipo(dados.getTipo());
-
         return repository.save(equipamento);
     }
 

@@ -1,9 +1,11 @@
 package com.projeto.emprestimo.service;
 
 import com.projeto.emprestimo.model.Emprestimo;
+import com.projeto.emprestimo.model.Equipamento;
 import com.projeto.emprestimo.repository.ColaboradorRepository;
 import com.projeto.emprestimo.repository.EmprestimoRepository;
 import com.projeto.emprestimo.repository.EquipamentoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,14 +33,20 @@ public class EmprestimoService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
     }
 
+    @Transactional
     public Emprestimo emprestar(Long equipamentoId, Long colaboradorId) {
-        repositoryEquipamento.findById(equipamentoId).orElseThrow(
+        Equipamento equipamento = repositoryEquipamento.findById(equipamentoId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de equipamento não encontrado"));
+
         if (!repositoryColaborador.existsById(colaboradorId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de colaborador não encontrado");
         }
 
+        equipamento.emprestar();
+        repositoryEquipamento.save(equipamento);
+
         Emprestimo emprestimo = new Emprestimo(equipamentoId, colaboradorId, LocalDate.now());
+
         return repositoryEmprestimo.save(emprestimo);
     }
 

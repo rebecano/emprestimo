@@ -1,6 +1,5 @@
 package com.projeto.emprestimo.service;
 
-import com.projeto.emprestimo.model.Emprestimo;
 import com.projeto.emprestimo.model.Equipamento;
 import com.projeto.emprestimo.model.TipoEquipamento;
 import com.projeto.emprestimo.repository.EmprestimoRepository;
@@ -34,12 +33,12 @@ public class EquipamentoService {
 
     public Equipamento buscar(Long id) {
         return repositoryEquipamento.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: equipamento não encontrado"));
     }
 
     public Equipamento cadastrar(Equipamento equipamento) {
         if (repositoryEquipamento.existsByPatrimonio(equipamento.getPatrimonio())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Patrimônio já cadastrado");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: patrimônio já cadastrado");
         }
         equipamento.setDisponivel(true);
         return repositoryEquipamento.save(equipamento);
@@ -56,7 +55,7 @@ public class EquipamentoService {
         buscar(id);
 
         if (repositoryEmprestimo.existsByEquipamentoId(id)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Equipamento tem histórico");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: equipamento tem histórico");
         }
 
         repositoryEquipamento.deleteById(id);

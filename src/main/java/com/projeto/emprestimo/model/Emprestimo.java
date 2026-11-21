@@ -33,7 +33,7 @@ public class Emprestimo {
     }
 
     public void devolver(LocalDate data) {
-        if (dataDevolucao != null) {throw new IllegalStateException("Empréstimo já devolvido");}
+        if (dataDevolucao != null) {throw new IllegalStateException("Erro: empréstimo já devolvido");}
         dataDevolucao = data;
     }
 

@@ -35,21 +35,21 @@ public class EmprestimoService {
 
     public Emprestimo buscar(Long id) {
         return repositoryEmprestimo.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empréstimo não encontrado"));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: empréstimo não encontrado"));
     }
 
     @Transactional
     public Emprestimo emprestar(Long equipamentoId, Long colaboradorId) {
         Equipamento equipamento = repositoryEquipamento.findById(equipamentoId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de equipamento não encontrado"));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de equipamento não encontrado"));
 
         if (!repositoryColaborador.existsById(colaboradorId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de colaborador não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de colaborador não encontrado");
         }
 
         if (repositoryEmprestimo.existsByColaboradorIdAndDataDevolucaoIsNullAndDataPrevistaDevolucaoBefore(
                 colaboradorId, LocalDate.now())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "O colaborador tem empréstimos em atraso");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: o colaborador tem empréstimos em atraso");
         }
 
         equipamento.emprestar();
@@ -66,7 +66,7 @@ public class EmprestimoService {
         emprestimo.devolver(LocalDate.now());
 
         Equipamento equipamento = repositoryEquipamento.findById(emprestimo.getEquipamentoId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de equipamento não encontrado"));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de equipamento não encontrado"));
         equipamento.devolver();
 
         repositoryEquipamento.save(equipamento);
@@ -76,7 +76,7 @@ public class EmprestimoService {
 
     public List<Emprestimo> listarDoColaborador(Long colaboradorId) {
         if (!repositoryColaborador.existsById(colaboradorId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de colaborador não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de colaborador não encontrado");
         }
         return repositoryEmprestimo.findByColaboradorId(colaboradorId);
     }

@@ -21,12 +21,12 @@ public class ColaboradorService {
 
     public Colaborador buscar(Long id) {
         return repository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Colaborador não encontrado"));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: colaborador não encontrado"));
     }
 
     public Colaborador cadastrar(Colaborador colaborador) {
         if (repository.existsByEmail(colaborador.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: email já cadastrado");
         }
         return repository.save(colaborador);
     }

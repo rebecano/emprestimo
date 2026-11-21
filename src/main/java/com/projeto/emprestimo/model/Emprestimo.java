@@ -37,7 +37,12 @@ public class Emprestimo {
         dataDevolucao = data;
     }
 
-    //public int estaAtrasadoEm(LocalDate data) {return true;}
+    public boolean estaAtrasadoEm(LocalDate data) {
+        if (dataDevolucao != null) {
+            return false;
+        }
+        return data.isAfter(dataPrevistaDevolucao);
+    }
 
     // public boolean isAtrasado() {return estaAtrasadoEm(LocalDate.now());}
 

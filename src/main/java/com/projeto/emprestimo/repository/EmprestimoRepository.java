@@ -9,4 +9,6 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
 
     List<Emprestimo> findByColaboradorId(Long colaboradorId);
 
+    boolean existsByEquipamentoId(Long equipamentoId);
+
 }

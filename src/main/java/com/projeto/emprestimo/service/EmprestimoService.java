@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmprestimoService {
@@ -46,6 +47,20 @@ public class EmprestimoService {
         repositoryEquipamento.save(equipamento);
 
         Emprestimo emprestimo = new Emprestimo(equipamentoId, colaboradorId, LocalDate.now());
+
+        return repositoryEmprestimo.save(emprestimo);
+    }
+
+    @Transactional
+    public Emprestimo devolver(Long id) {
+        Emprestimo emprestimo = buscar(id);
+        emprestimo.devolver(LocalDate.now());
+
+        Equipamento equipamento = repositoryEquipamento.findById(emprestimo.getEquipamentoId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de equipamento não encontrado"));
+        equipamento.devolver();
+
+        repositoryEquipamento.save(equipamento);
 
         return repositoryEmprestimo.save(emprestimo);
     }

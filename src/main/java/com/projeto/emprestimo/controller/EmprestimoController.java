@@ -27,4 +27,7 @@ public class EmprestimoController {
         return service.emprestar(equipamentoId, colaboradorId);
     }
 
+    @PutMapping("/{id}/devolucao")
+    public Emprestimo devolver(@PathVariable Long id) {return service.devolver(id);}
+
 }

@@ -16,7 +16,7 @@ class EquipamentoTest {
     }
 
     @Test
-    void naoEmprestarUmEquipamentoIndisponivel() {
+    void naoEmprestaEquipamentoIndisponivel() {
         Equipamento equipamento = new Equipamento();
 
         equipamento.emprestar();
@@ -25,7 +25,7 @@ class EquipamentoTest {
     }
 
     @Test
-    void verificarSeEquipamentoFicaDisponivelDepoisDaDevolucao() {
+    void devolverEquipamentoEmprestadoODeixaDisponivel() {
         Equipamento equipamento = new Equipamento();
 
         equipamento.emprestar();

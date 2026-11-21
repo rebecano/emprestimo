@@ -16,7 +16,9 @@ public class EmprestimoController {
     public EmprestimoController(EmprestimoService service) {this.service = service;}
 
     @GetMapping
-    public List<Emprestimo> listar() {return service.listar();}
+    public List<Emprestimo> listar(@RequestParam(required = false) Boolean atrasados) {
+        return service.listar(atrasados);
+    }
 
     @GetMapping("/{id}")
     public Emprestimo buscar(@PathVariable Long id) {return service.buscar(id);}

@@ -27,7 +27,12 @@ public class EmprestimoService {
         this.repositoryEquipamento = repositoryEquipamento;
     }
 
-    public List<Emprestimo> listar() {return repositoryEmprestimo.findAll();}
+    public List<Emprestimo> listar(Boolean atrasados) {
+        if (Boolean.TRUE.equals(atrasados)) {
+            return repositoryEmprestimo.findByDataDevolucaoIsNullAndDataPrevistaDevolucaoBefore(LocalDate.now());
+        }
+        return repositoryEmprestimo.findAll();
+    }
 
     public Emprestimo buscar(Long id) {
         return repositoryEmprestimo.findById(id).orElseThrow(

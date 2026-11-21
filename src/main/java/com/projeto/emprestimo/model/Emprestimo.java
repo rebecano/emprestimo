@@ -44,7 +44,7 @@ public class Emprestimo {
         return data.isAfter(dataPrevistaDevolucao);
     }
 
-    // public boolean isAtrasado() {return estaAtrasadoEm(LocalDate.now());}
+    public boolean isAtrasado() {return estaAtrasadoEm(LocalDate.now());}
 
     public Long getId() {return id;}
 

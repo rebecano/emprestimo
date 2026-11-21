@@ -34,9 +34,9 @@ public class Emprestimo {
 
     public void devolver(LocalDate data) { }
 
-    public boolean estaAtrasadoEm(LocalDate data) {return true;}
+    //public int estaAtrasadoEm(LocalDate data) {return true;}
 
-    public boolean isAtrasado() {return estaAtrasadoEm(LocalDate.now());}
+    // public boolean isAtrasado() {return estaAtrasadoEm(LocalDate.now());}
 
     public Long getId() {return id;}
 

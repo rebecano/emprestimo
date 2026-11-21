@@ -2,6 +2,8 @@ package com.projeto.emprestimo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Entity
 public class Equipamento {
@@ -28,6 +30,15 @@ public class Equipamento {
 
     public Equipamento() { }
 
+    public void emprestar() {
+        if (!isDisponivel()) {
+            throw new IllegalArgumentException("Equipamento indisponível");
+        }
+        setDisponivel(false);
+    }
+
+    public void devolver() {setDisponivel(true);}
+
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
@@ -42,4 +53,5 @@ public class Equipamento {
 
     public boolean isDisponivel() {return disponivel;}
     public void setDisponivel(boolean disponivel) {this.disponivel = disponivel;}
+
 }

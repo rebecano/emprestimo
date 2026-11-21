@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmprestimoService {
@@ -46,6 +45,11 @@ public class EmprestimoService {
 
         if (!repositoryColaborador.existsById(colaboradorId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ID de colaborador não encontrado");
+        }
+
+        if (repositoryEmprestimo.existsByColaboradorIdAndDataDevolucaoIsNullAndDataPrevistaDevolucaoBefore(
+                colaboradorId, LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O colaborador tem empréstimos em atraso");
         }
 
         equipamento.emprestar();

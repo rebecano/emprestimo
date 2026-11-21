@@ -10,11 +10,12 @@ public class Colaborador {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O nome é obrigatório")
+    @NotBlank(message = "Erro: o nome é obrigatório")
     @Column(nullable = false)
     private String nome;
 
-    @NotBlank(message = "O email é obrigatório")
+    @NotBlank(message = "Erro: o email é obrigatório")
+    @Email(message = "Erro: o formato do email é inválido")
     @Column(nullable = false, unique = true)
     private String email;
 

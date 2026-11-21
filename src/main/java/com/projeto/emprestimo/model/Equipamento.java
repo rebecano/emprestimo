@@ -31,9 +31,7 @@ public class Equipamento {
     public Equipamento() { }
 
     public void emprestar() {
-        if (!isDisponivel()) {
-            throw new IllegalArgumentException("Equipamento indisponível");
-        }
+        if (!isDisponivel()) {throw new IllegalStateException("Equipamento indisponível");}
         setDisponivel(false);
     }
 

@@ -10,15 +10,15 @@ public class Equipamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O patrimônio é obrigatório")
+    @NotBlank(message = "Erro: o patrimônio é obrigatório")
     @Column(nullable = false, unique = true)
     private String patrimonio;
 
-    @NotBlank(message = "O nome é obrigatório")
+    @NotBlank(message = "Erro: o nome é obrigatório")
     @Column(nullable = false)
     private String nome;
 
-    @NotNull(message = "O tipo é obrigatório")
+    @NotNull(message = "Erro: o tipo é obrigatório")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoEquipamento tipo;

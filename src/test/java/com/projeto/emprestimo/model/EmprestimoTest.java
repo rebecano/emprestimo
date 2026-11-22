@@ -1,5 +1,6 @@
 package com.projeto.emprestimo.model;
 
+import com.projeto.emprestimo.exception.ConflitoException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -31,7 +32,7 @@ class EmprestimoTest {
 
         emprestimo.devolver(LocalDate.of(2026, 11, 20));
 
-        assertThrows(IllegalStateException.class, () -> emprestimo.devolver(LocalDate.of(2026, 11, 21)));
+        assertThrows(ConflitoException.class, () -> emprestimo.devolver(LocalDate.of(2026, 11, 21)));
     }
 
     @Test

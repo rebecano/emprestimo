@@ -1,12 +1,12 @@
 package com.projeto.emprestimo.service;
 
+import com.projeto.emprestimo.exception.ConflitoException;
+import com.projeto.emprestimo.exception.NaoEncontradoException;
 import com.projeto.emprestimo.model.Equipamento;
 import com.projeto.emprestimo.model.TipoEquipamento;
 import com.projeto.emprestimo.repository.EmprestimoRepository;
 import com.projeto.emprestimo.repository.EquipamentoRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -33,12 +33,12 @@ public class EquipamentoService {
 
     public Equipamento buscar(Long id) {
         return repositoryEquipamento.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: equipamento não encontrado"));
+                () -> new NaoEncontradoException("Erro: equipamento não encontrado"));
     }
 
     public Equipamento cadastrar(Equipamento equipamento) {
         if (repositoryEquipamento.existsByPatrimonio(equipamento.getPatrimonio())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: patrimônio já cadastrado");
+            throw new ConflitoException("Erro: patrimônio já cadastrado");
         }
         equipamento.setDisponivel(true);
         return repositoryEquipamento.save(equipamento);
@@ -55,7 +55,7 @@ public class EquipamentoService {
         buscar(id);
 
         if (repositoryEmprestimo.existsByEquipamentoId(id)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: equipamento tem histórico");
+            throw new ConflitoException("Erro: equipamento tem histórico");
         }
 
         repositoryEquipamento.deleteById(id);

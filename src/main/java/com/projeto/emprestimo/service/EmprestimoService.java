@@ -1,5 +1,7 @@
 package com.projeto.emprestimo.service;
 
+import com.projeto.emprestimo.exception.ConflitoException;
+import com.projeto.emprestimo.exception.NaoEncontradoException;
 import com.projeto.emprestimo.model.Colaborador;
 import com.projeto.emprestimo.model.Emprestimo;
 import com.projeto.emprestimo.model.Equipamento;
@@ -7,9 +9,7 @@ import com.projeto.emprestimo.repository.ColaboradorRepository;
 import com.projeto.emprestimo.repository.EmprestimoRepository;
 import com.projeto.emprestimo.repository.EquipamentoRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,20 +36,20 @@ public class EmprestimoService {
 
     public Emprestimo buscar(Long id) {
         return repositoryEmprestimo.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: empréstimo não encontrado"));
+                () -> new NaoEncontradoException("Erro: empréstimo não encontrado"));
     }
 
     @Transactional
     public Emprestimo emprestar(Long equipamentoId, Long colaboradorId) {
         Equipamento equipamento = repositoryEquipamento.findById(equipamentoId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de equipamento não encontrado"));
+                () -> new NaoEncontradoException("Erro: ID de equipamento não encontrado"));
 
         Colaborador colaborador = repositoryColaborador.findById(colaboradorId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de colaborador não encontrado"));
+                () -> new NaoEncontradoException("Erro: ID de colaborador não encontrado"));
 
         if (repositoryEmprestimo.existsByColaboradorIdAndDataDevolucaoIsNullAndDataPrevistaDevolucaoBefore(
                 colaboradorId, LocalDate.now())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Erro: " + colaborador.getNome() + "está com empréstimos em atraso");
+            throw new ConflitoException("Erro: " + colaborador.getNome() + "está com empréstimos em atraso");
         }
 
         equipamento.emprestar();
@@ -66,7 +66,8 @@ public class EmprestimoService {
         emprestimo.devolver(LocalDate.now());
 
         Equipamento equipamento = repositoryEquipamento.findById(emprestimo.getEquipamentoId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de equipamento não encontrado"));
+                () -> new NaoEncontradoException("Erro: ID de equipamento não encontrado"));
+
         equipamento.devolver();
 
         repositoryEquipamento.save(equipamento);
@@ -76,7 +77,7 @@ public class EmprestimoService {
 
     public List<Emprestimo> listarDoColaborador(Long colaboradorId) {
         if (!repositoryColaborador.existsById(colaboradorId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Erro: ID de colaborador não encontrado");
+            throw new NaoEncontradoException("Erro: ID de colaborador não encontrado");
         }
         return repositoryEmprestimo.findByColaboradorId(colaboradorId);
     }

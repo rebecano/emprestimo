@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empréstimo de Equipamentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Visual limpo, com bastante espaço em branco, cantos arredondados e uma cor de destaque só. */
+:root{--bg:#f5f5f7;--card:#fff;--tx:#1d1d1f;--mut:#6e6e73;--line:#e8e8ed;--field:#d2d2d7;
+--acc:#2f5bea;--accD:#2449c4;--accS:#eaf0ff;--ok:#1a8f4c;--okS:#e4f6ec;--warn:#d9381e;--warnS:#ffeae5;--neu:#6e6e73;--neuS:#efeff2}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--tx);color-scheme:light;-webkit-font-smoothing:antialiased}
+.in{max-width:1040px;margin:0 auto;padding:0 20px}
+header{text-align:center;padding:56px 20px 30px}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.08;font-weight:700;letter-spacing:-.03em;margin:0 0 12px}
+header p{margin:0 auto;color:var(--mut);font-size:1.1rem;max-width:46ch}
+.seg{display:inline-flex;gap:2px;background:#e8e8ed;padding:3px;border-radius:12px;margin-top:28px}
+.seg button{font:inherit;font-weight:500;padding:8px 22px;border:0;border-radius:9px;background:transparent;color:var(--tx);cursor:pointer;transition:background .2s,box-shadow .2s}
+.seg button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.14)}
+main{padding-bottom:80px}
+section{display:none}section.on{display:block}
+.card{max-width:480px;margin:0 auto 44px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:34px 32px}
+.card h2{font-size:1.5rem;font-weight:650;letter-spacing:-.02em;text-align:center;margin:0 0 24px}
+.card form{display:flex;flex-direction:column;gap:16px}
+label{display:flex;flex-direction:column;gap:6px;font-size:.88rem;font-weight:500;color:var(--mut);text-align:left}
+input,select{font:inherit;color:var(--tx);height:46px;padding:0 14px;border:1px solid var(--field);border-radius:12px;background:#fff;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px rgba(47,91,234,.16)}
+input:disabled{background:var(--bg);color:var(--mut)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.btn{font:inherit;font-weight:600;height:46px;border:0;border-radius:12px;background:var(--acc);color:#fff;cursor:pointer;margin-top:4px;transition:background .15s,transform .1s}
+.btn:hover{background:var(--accD)}.btn:active{transform:scale(.99)}
+.btn.sec{background:var(--neuS);color:var(--tx);margin-top:-4px}.btn.sec:hover{background:#e3e3e8}
+.lista{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.filtros{display:flex;flex-wrap:wrap;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line)}
+.filtros label{flex-direction:row;align-items:center;gap:10px}
+.filtros select{height:40px;border-radius:10px}
+.filtros .chk{color:var(--tx);font-size:.95rem;cursor:pointer}
+.filtros input[type=checkbox]{height:auto;width:18px;accent-color:var(--acc)}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:14px 18px;white-space:nowrap;font-variant-numeric:tabular-nums}
+th{font-size:.8rem;font-weight:500;color:var(--mut);border-bottom:1px solid var(--line)}
+td{border-bottom:1px solid #f1f1f4}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fafafc}
+.pat{background:var(--neuS);padding:2px 9px;border-radius:7px;font-size:.86rem;font-weight:500}
+.pill{display:inline-flex;align-items:center;padding:3px 11px;border-radius:99px;font-size:.82rem;font-weight:500}
+.p-ok{background:var(--okS);color:var(--ok)}.p-neu{background:var(--neuS);color:var(--neu)}
+.p-warn{background:var(--warnS);color:var(--warn)}.p-acc{background:var(--accS);color:var(--acc)}
+.tipo{background:hsl(var(--h) 90% 94%);color:hsl(var(--h) 60% 30%)}
+button.ln{font:inherit;font-weight:500;font-size:.92rem;background:none;border:0;color:var(--acc);cursor:pointer;padding:4px 10px;border-radius:8px}
+button.ln:hover{background:var(--accS)}
+button.ln.red{color:var(--warn)}button.ln.red:hover{background:var(--warnS)}
+.vazio{color:var(--mut);padding:36px 18px;text-align:center;white-space:normal}
+#msg{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);max-width:min(460px,calc(100% - 32px));padding:12px 22px;border-radius:99px;background:var(--tx);color:#fff;display:none;z-index:9;text-align:center;font-weight:500}
+#msg.er{background:var(--warn)}
+@media (max-width:560px){.card{padding:26px 20px}.seg button{padding:8px 14px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Empréstimo de Equipamentos</h1>
+  <p>Cadastre equipamentos e pessoas, registre quem pegou o quê e acompanhe o que está atrasado.</p>
+  <nav class="seg">
+    <button data-aba="eq" class="on" aria-current="page">Equipamentos</button>
+    <button data-aba="co">Colaboradores</button>
+    <button data-aba="em">Empréstimos</button>
+  </nav>
+</header>
+
+<main class="in">
+
+<section id="eq" class="on">
+  <div class="card">
+    <h2 id="eqTitulo">Novo equipamento</h2>
+    <form id="eqForm">
+      <input type="hidden" id="eqId">
+      <label>Patrimônio<input id="eqPat" required></label>
+      <label>Nome<input id="eqNome" required></label>
+      <label>Tipo<select id="eqTipo"></select></label>
+      <button class="btn" id="eqSalvar">Cadastrar</button>
+      <button type="button" class="btn sec" id="eqCancela" hidden>Cancelar edição</button>
+    </form>
+  </div>
+  <div class="lista">
+    <div class="filtros">
+      <label>Tipo<select id="fTipo"><option value="">Todos</option></select></label>
+      <label>Situação<select id="fDisp"><option value="">Todas</option><option value="true">Disponíveis</option><option value="false">Emprestados</option></select></label>
+    </div>
+    <div class="wrap"><table>
+      <thead><tr><th>ID</th><th>Patrimônio</th><th>Nome</th><th>Tipo</th><th>Situação</th><th></th></tr></thead>
+      <tbody id="eqLista"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="co">
+  <div class="card">
+    <h2>Novo colaborador</h2>
+    <form id="coForm">
+      <label>Nome<input id="coNome" required></label>
+      <label>E-mail<input id="coEmail" type="email" required></label>
+      <label>Cargo<input id="coCargo"></label>
+      <button class="btn">Cadastrar</button>
+    </form>
+  </div>
+  <div class="lista">
+    <div class="wrap"><table>
+      <thead><tr><th>ID</th><th>Nome</th><th>E-mail</th><th>Cargo</th><th></th></tr></thead>
+      <tbody id="coLista"></tbody>
+    </table></div>
+  </div>
+  <div class="lista" id="hist" hidden style="margin-top:24px">
+    <div class="filtros"><strong id="histTitulo"></strong></div>
+    <div class="wrap"><table>
+      <thead><tr><th>ID</th><th>Equipamento</th><th>Colaborador</th><th>Saída</th><th>Previsto</th><th>Devolução</th><th>Situação</th></tr></thead>
+      <tbody id="histLista"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="em">
+  <div class="card">
+    <h2>Novo empréstimo</h2>
+    <form id="emForm">
+      <label>Equipamento disponível<select id="emEq"></select></label>
+      <label>Colaborador<select id="emCo"></select></label>
+      <button class="btn">Emprestar</button>
+    </form>
+  </div>
+  <div class="lista">
+    <div class="filtros"><label class="chk"><input type="checkbox" id="fAtr"> Mostrar só os atrasados</label></div>
+    <div class="wrap"><table>
+      <thead><tr><th>ID</th><th>Equipamento</th><th>Colaborador</th><th>Saída</th><th>Previsto</th><th>Devolução</th><th>Situação</th><th></th></tr></thead>
+      <tbody id="emLista"></tbody>
+    </table></div>
+  </div>
+</section>
+
+</main>
+<div id="msg" role="status" aria-live="polite"></div>
+
+<script>
+// Esta página é só a "tela": toda regra de negócio continua na API.
+// Ela fica em src/main/resources/static/view e o Spring a serve junto com a API,
+// por isso as chamadas usam caminhos relativos (/equipamentos) e funcionam
+// tanto no localhost quanto no Render, sem configurar CORS.
+
+const $ = s => document.querySelector(s);
+const TIPOS = ['NOTEBOOK', 'MONITOR', 'MOUSE', 'TECLADO', 'HEADSET', 'OUTRO'];   // os valores do enum TipoEquipamento
+const MATIZ = { NOTEBOOK: 220, MONITOR: 270, MOUSE: 155, TECLADO: 28, HEADSET: 330, OUTRO: 195 };   // uma cor suave para cada tipo
+const tipoNome = t => t ? t.charAt(0) + t.slice(1).toLowerCase() : '';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dt = d => d ? d.split('-').reverse().join('/') : '—';   // 2026-11-22 vira 22/11/2026
+const vazia = (n, t) => `<tr><td colspan="${n}" class="vazio">${t}</td></tr>`;
+
+let timer;
+function aviso(texto, ok) {
+  const m = $('#msg');
+  m.textContent = texto; m.className = ok ? '' : 'er'; m.style.display = 'block';
+  clearTimeout(timer); timer = setTimeout(() => m.style.display = 'none', 5000);
+}
+
+// A API devolve {"mensagem": "..."} (404 e 409) ou {"campo": "mensagem"} (400 da validação).
+// Aqui tiramos o "Erro: " do começo, porque o aviso já aparece como erro.
+const limpa = t => { t = String(t).replace(/^Erro:\s*/i, ''); return t.charAt(0).toUpperCase() + t.slice(1); };
+function textoErro(d, status) {
+  let t;
+  if (typeof d === 'string' && d) t = limpa(d);
+  else if (d && typeof d === 'object') {
+    if (d.timestamp && d.status) t = d.message ? limpa(d.message) : d.error;   // formato padrão do Spring
+    else if (d.mensagem) t = limpa(d.mensagem);
+    else t = Object.values(d).map(limpa).join('. ');
+  }
+  return t || 'Algo deu errado (código ' + status + ').';
+}
+
+// Faz o pedido HTTP; se a API responder com erro (404, 409, 400...), lança o texto do erro
+async function api(url, opcoes = {}) {
+  let r;
+  try { r = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...opcoes }); }
+  catch { throw new Error('Não foi possível falar com a API. No Render, espere cerca de um minuto e tente de novo.'); }
+  const t = await r.text();
+  let d = t; try { d = t ? JSON.parse(t) : null; } catch {}
+  if (!r.ok) throw new Error(textoErro(d, r.status));
+  return d;
+}
+const tentar = async (fn, okMsg) => { try { await fn(); if (okMsg) aviso(okMsg, true); } catch (e) { aviso(e.message, false); } };
+
+/* ---------- Equipamentos ---------- */
+function limparEq() {
+  $('#eqForm').reset(); $('#eqId').value = ''; $('#eqPat').disabled = false;
+  $('#eqTitulo').textContent = 'Novo equipamento'; $('#eqSalvar').textContent = 'Cadastrar'; $('#eqCancela').hidden = true;
+}
+async function carregarEq() {
+  $('#eqLista').innerHTML = vazia(6, 'Carregando…');
+  const p = new URLSearchParams();
+  if ($('#fTipo').value) p.set('tipo', $('#fTipo').value);
+  if ($('#fDisp').value) p.set('disponivel', $('#fDisp').value);
+  const l = await api('/equipamentos' + (p.toString() ? '?' + p : ''));
+  $('#eqLista').innerHTML = l.length ? l.map(e => `<tr>
+    <td>${e.id}</td><td><span class="pat">${esc(e.patrimonio)}</span></td><td>${esc(e.nome)}</td>
+    <td><span class="pill tipo" style="--h:${MATIZ[e.tipo] ?? 210}">${tipoNome(e.tipo)}</span></td>
+    <td><span class="pill ${e.disponivel ? 'p-ok' : 'p-neu'}">${e.disponivel ? 'Disponível' : 'Emprestado'}</span></td>
+    <td><button class="ln" data-ed="${e.id}" data-p="${esc(e.patrimonio)}" data-n="${esc(e.nome)}" data-t="${e.tipo}">Editar</button>
+        <button class="ln red" data-rm="${e.id}">Remover</button></td></tr>`).join('')
+    : vazia(6, 'Nenhum equipamento por aqui. Cadastre o primeiro no formulário acima.');
+}
+$('#eqForm').onsubmit = ev => {
+  ev.preventDefault();
+  const id = $('#eqId').value;
+  tentar(async () => {
+    const corpo = { nome: $('#eqNome').value, tipo: $('#eqTipo').value };
+    if (id) {                                   // editar: PUT só com nome e tipo
+      await api('/equipamentos/' + id, { method: 'PUT', body: JSON.stringify(corpo) });
+    } else {                                    // cadastrar: POST com o patrimônio também
+      corpo.patrimonio = $('#eqPat').value;
+      await api('/equipamentos', { method: 'POST', body: JSON.stringify(corpo) });
+    }
+    limparEq(); await carregarEq();
+  }, id ? 'Equipamento atualizado.' : 'Equipamento cadastrado.');
+};
+$('#eqCancela').onclick = limparEq;
+$('#fTipo').onchange = $('#fDisp').onchange = () => tentar(carregarEq);
+$('#eqLista').onclick = ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  if (b.dataset.ed) {
+    $('#eqId').value = b.dataset.ed; $('#eqPat').value = b.dataset.p; $('#eqPat').disabled = true;
+    $('#eqNome').value = b.dataset.n; $('#eqTipo').value = b.dataset.t;
+    $('#eqTitulo').textContent = 'Editar equipamento'; $('#eqSalvar').textContent = 'Salvar alterações';
+    $('#eqCancela').hidden = false; scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (b.dataset.rm && confirm('Remover este equipamento?'))
+    tentar(async () => { await api('/equipamentos/' + b.dataset.rm, { method: 'DELETE' }); await carregarEq(); }, 'Equipamento removido.');
+};
+
+/* ---------- Empréstimos (a mesma linha serve para a lista e para o histórico) ---------- */
+const linhaEmp = (e, acoes) => {
+  const st = e.dataDevolucao ? ['Devolvido', 'p-acc'] : e.atrasado ? ['Atrasado', 'p-warn'] : ['Em dia', 'p-ok'];
+  return `<tr><td>${e.id}</td>
+    <td>${esc(e.equipamento?.nome)} <span class="pat">${esc(e.equipamento?.patrimonio)}</span></td><td>${esc(e.colaborador?.nome)}</td>
+    <td>${dt(e.dataEmprestimo)}</td><td>${dt(e.dataPrevistaDevolucao)}</td><td>${dt(e.dataDevolucao)}</td>
+    <td><span class="pill ${st[1]}">${st[0]}</span></td>
+    ${acoes ? `<td>${e.dataDevolucao ? '' : `<button class="ln" data-dv="${e.id}">Registrar devolução</button>`}</td>` : ''}</tr>`;
+};
+async function carregarEm() {
+  $('#emLista').innerHTML = vazia(8, 'Carregando…');
+  const [eq, co, em] = await Promise.all([
+    api('/equipamentos?disponivel=true'), api('/colaboradores'),
+    api('/emprestimos' + ($('#fAtr').checked ? '?atrasados=true' : ''))]);
+  $('#emEq').innerHTML = eq.map(e => `<option value="${e.id}">${esc(e.nome)} (${esc(e.patrimonio)})</option>`).join('') || '<option value="">Nenhum equipamento disponível</option>';
+  $('#emCo').innerHTML = co.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join('') || '<option value="">Cadastre um colaborador primeiro</option>';
+  $('#emLista').innerHTML = em.length ? em.map(e => linhaEmp(e, true)).join('')
+    : vazia(8, $('#fAtr').checked ? 'Nenhum empréstimo atrasado. Tudo em dia!' : 'Nenhum empréstimo registrado ainda.');
+}
+$('#emForm').onsubmit = ev => {
+  ev.preventDefault();
+  tentar(async () => {
+    await api(`/emprestimos?equipamentoId=${$('#emEq').value}&colaboradorId=${$('#emCo').value}`, { method: 'POST' });
+    await carregarEm();
+  }, 'Empréstimo registrado.');
+};
+$('#fAtr').onchange = () => tentar(carregarEm);
+$('#emLista').onclick = ev => {
+  const b = ev.target.closest('button'); if (!b || !b.dataset.dv) return;
+  tentar(async () => { await api(`/emprestimos/${b.dataset.dv}/devolucao`, { method: 'PUT' }); await carregarEm(); }, 'Devolução registrada.');
+};
+
+/* ---------- Colaboradores ---------- */
+async function carregarCo() {
+  $('#coLista').innerHTML = vazia(5, 'Carregando…');
+  const l = await api('/colaboradores');
+  $('#coLista').innerHTML = l.length ? l.map(c => `<tr>
+    <td>${c.id}</td><td>${esc(c.nome)}</td><td>${esc(c.email)}</td><td>${esc(c.cargo)}</td>
+    <td><button class="ln" data-h="${c.id}" data-n="${esc(c.nome)}">Ver empréstimos</button></td></tr>`).join('')
+    : vazia(5, 'Nenhum colaborador ainda. Cadastre o primeiro no formulário acima.');
+}
+$('#coForm').onsubmit = ev => {
+  ev.preventDefault();
+  tentar(async () => {
+    await api('/colaboradores', { method: 'POST', body: JSON.stringify({ nome: $('#coNome').value, email: $('#coEmail').value, cargo: $('#coCargo').value }) });
+    $('#coForm').reset(); await carregarCo();
+  }, 'Colaborador cadastrado.');
+};
+$('#coLista').onclick = ev => {
+  const b = ev.target.closest('button'); if (!b || !b.dataset.h) return;
+  tentar(async () => {
+    const l = await api(`/colaboradores/${b.dataset.h}/emprestimos`);
+    $('#histTitulo').textContent = 'Empréstimos de ' + b.dataset.n;
+    $('#histLista').innerHTML = l.length ? l.map(e => linhaEmp(e, false)).join('')
+      : vazia(7, 'Esta pessoa ainda não pegou nenhum equipamento.');
+    $('#hist').hidden = false;
+  });
+};
+
+/* ---------- Abas e início ---------- */
+const cargas = { eq: carregarEq, co: carregarCo, em: carregarEm };
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => { x.classList.remove('on'); x.removeAttribute('aria-current'); });
+  document.querySelectorAll('section').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); b.setAttribute('aria-current', 'page'); $('#' + b.dataset.aba).classList.add('on');
+  tentar(cargas[b.dataset.aba]);
+});
+TIPOS.forEach(t => { $('#eqTipo').add(new Option(tipoNome(t), t)); $('#fTipo').add(new Option(tipoNome(t), t)); });
+tentar(carregarEq);
+</script>
+</body>
+</html>

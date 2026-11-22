@@ -1,5 +1,6 @@
 package com.projeto.emprestimo.model;
 
+import com.projeto.emprestimo.exception.ConflitoException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -29,7 +30,7 @@ public class Equipamento {
     public Equipamento() { }
 
     public void emprestar() {
-        if (!isDisponivel()) {throw new IllegalStateException("Erro: equipamento indisponível");}
+        if (!isDisponivel()) {throw new ConflitoException("Erro: equipamento indisponível");}
         setDisponivel(false);
     }
 

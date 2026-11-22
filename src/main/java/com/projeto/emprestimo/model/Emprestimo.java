@@ -1,5 +1,6 @@
 package com.projeto.emprestimo.model;
 
+import com.projeto.emprestimo.exception.ConflitoException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,7 +34,7 @@ public class Emprestimo {
     }
 
     public void devolver(LocalDate data) {
-        if (dataDevolucao != null) {throw new IllegalStateException("Erro: empréstimo já devolvido");}
+        if (dataDevolucao != null) {throw new ConflitoException("Erro: empréstimo já devolvido");}
         dataDevolucao = data;
     }
 

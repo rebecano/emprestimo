@@ -4,6 +4,7 @@ import com.projeto.emprestimo.model.Colaborador;
 import com.projeto.emprestimo.model.Emprestimo;
 import com.projeto.emprestimo.service.ColaboradorService;
 import com.projeto.emprestimo.service.EmprestimoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class ColaboradorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Colaborador cadastrar(@RequestBody Colaborador colaborador) {
+    public Colaborador cadastrar(@Valid @RequestBody Colaborador colaborador) {
         return serviceColaborador.cadastrar(colaborador);
     }
 

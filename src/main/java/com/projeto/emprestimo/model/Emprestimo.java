@@ -1,10 +1,7 @@
 package com.projeto.emprestimo.model;
 
 import com.projeto.emprestimo.exception.ConflitoException;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -15,8 +12,8 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long equipamentoId;
-    private Long colaboradorId;
+    @ManyToOne private Equipamento equipamento;
+    @ManyToOne private Colaborador colaborador;
 
     private LocalDate dataEmprestimo;
     private LocalDate dataPrevistaDevolucao;
@@ -26,9 +23,9 @@ public class Emprestimo {
 
     public Emprestimo() { }
 
-    public Emprestimo(Long equipamentoId, Long colaboradorId, LocalDate hoje) {
-        this.equipamentoId = equipamentoId;
-        this.colaboradorId = colaboradorId;
+    public Emprestimo(Equipamento equipamento, Colaborador colaborador, LocalDate hoje) {
+        this.equipamento = equipamento;
+        this.colaborador = colaborador;
         dataEmprestimo = hoje;
         dataPrevistaDevolucao = dataEmprestimo.plusDays(DIAS_DE_GARANTIA);
     }
@@ -49,9 +46,9 @@ public class Emprestimo {
 
     public Long getId() {return id;}
 
-    public Long getEquipamentoId() {return equipamentoId;}
+    public Equipamento getEquipamento() {return equipamento;}
 
-    public Long getColaboradorId() {return colaboradorId;}
+    public Colaborador getColaborador() {return colaborador;}
 
     public LocalDate getDataEmprestimo() {return dataEmprestimo;}
 

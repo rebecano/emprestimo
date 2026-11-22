@@ -49,13 +49,13 @@ public class EmprestimoService {
 
         if (repositoryEmprestimo.existsByColaboradorIdAndDataDevolucaoIsNullAndDataPrevistaDevolucaoBefore(
                 colaboradorId, LocalDate.now())) {
-            throw new ConflitoException("Erro: " + colaborador.getNome() + "está com empréstimos em atraso");
+            throw new ConflitoException("Erro: " + colaborador.getNome() + " está com empréstimos em atraso");
         }
 
         equipamento.emprestar();
         repositoryEquipamento.save(equipamento);
 
-        Emprestimo emprestimo = new Emprestimo(equipamentoId, colaboradorId, LocalDate.now());
+        Emprestimo emprestimo = new Emprestimo(equipamento, colaborador, LocalDate.now());
 
         return repositoryEmprestimo.save(emprestimo);
     }
@@ -65,9 +65,7 @@ public class EmprestimoService {
         Emprestimo emprestimo = buscar(id);
         emprestimo.devolver(LocalDate.now());
 
-        Equipamento equipamento = repositoryEquipamento.findById(emprestimo.getEquipamentoId()).orElseThrow(
-                () -> new NaoEncontradoException("Erro: ID de equipamento não encontrado"));
-
+        Equipamento equipamento = emprestimo.getEquipamento();
         equipamento.devolver();
 
         repositoryEquipamento.save(equipamento);

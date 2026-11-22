@@ -17,7 +17,7 @@ Projeto 2 do bootcamp #ElasTech Java + IA: uma API REST em Java com Spring Boot 
 - Lista os empréstimos, com filtro para ver só os atrasados, e mostra o histórico de cada colaborador.
 - Atualiza (nome e tipo) e remove equipamentos.
 - Recusa operações que quebram uma regra de negócio, respondendo com o status HTTP certo e uma mensagem clara.
-- Tem uma tela web simples (`/view/index.html`) que usa a própria API, além da documentação interativa (Swagger).
+- Tem uma tela web simples (`/index.html`) que usa a própria API, além da documentação interativa (Swagger).
 
 ## Como executar
 
@@ -60,7 +60,7 @@ com.projeto
     └── config       SwaggerConfig
 ```
 
-A tela web fica em `src/main/resources/static/view/index.html`, e o Spring a serve junto com a API.
+A tela web fica em `src/main/resources/static/index.html`, e o Spring a serve junto com a API.
 
 ### Divisão de responsabilidades
 
@@ -159,5 +159,5 @@ Spring Security com JWT não foi implementado e fica para uma próxima etapa.
 - **Validação:** o `@Valid` está nos cadastros (`POST`). Por isso o `PUT` de equipamento aceita um corpo sem patrimônio.
 - **Prazo fixo:** os 14 dias de empréstimo são uma constante no `Emprestimo`, igual para todos os equipamentos.
 - **Datas:** o sistema usa `LocalDate`, sem hora. O empréstimo vence no fim do dia do prazo, e só no dia seguinte passa a contar como atrasado.
-- **Front-end:** a tela em `static/view` foi feita com apoio de IA, como a professora liberou, e só consome a API: toda regra de negócio fica no back-end.
+- **Front-end:** a tela em `static` só consome a API: toda regra de negócio fica no back-end.
 - **Exceções do Java:** os services e as entidades lançam exceções próprias (`NaoEncontradoException` e `ConflitoException`), e o `TratadorDeErros` define o status de cada uma.

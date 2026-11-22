@@ -33,7 +33,7 @@ Com a aplicação rodando:
 
 | O quê | Endereço |
 |---|---|
-| Tela web | http://localhost:8080/view/index.html |
+| Tela web | http://localhost:8080/index.html |
 | Documentação (Swagger) | http://localhost:8080/swagger-ui/index.html |
 | Saúde da aplicação (Actuator) | http://localhost:8080/actuator/health |
 | Console do banco (H2) | http://localhost:8080/h2-console |

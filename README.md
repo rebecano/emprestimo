@@ -6,7 +6,7 @@ Projeto 2 do bootcamp #ElasTech Java + IA: uma API REST em Java com Spring Boot 
 
 - **Autora:** Rebeca
 - **API no ar (Render):** https://emprestimo-6nu6.onrender.com
-- **Vídeo de demonstração:** <link do vídeo>
+- **Vídeo de demonstração:** https://youtu.be/GUJWW33rcCo
 
 ## O que o sistema faz
 
